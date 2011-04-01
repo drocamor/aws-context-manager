@@ -2,15 +2,26 @@
 
 # ACM: The AWS Context Manager - Changes up your account IDs and credentials for your command line tools when switching AWS accounts.
 
+
 # Process commands:
+function printUsage {
+cat<<EOF
+acm: Sets, creates and deletes AWS contexts.
 
-# disable - touches a file to disable ACM
-# verbose - Prints your context before running any EC2 commands
-# create <context> - creates a new context
-# switch <context> - switches to a context
-# delete <context> - deletes a context
-# <none> - Prints the context you are currently in 
+Usage: acm <command> 
 
+Command is one of the following:
+<none> - Prints the context you are currently in 
+create <context> - creates a new context
+switch <context> - switches to a context
+delete <context> - deletes a context
+disable - Touches a file to disable ACM
+verbose - Prints your context before running any EC2 commands
+
+See http://github.com/
+
+EOF
+}
 # Startup:
 # Check for ~/.acm directory, create it if neccessary
 if [[ ! -d ~/.acm ]]; then
@@ -39,7 +50,21 @@ case "$1" in
 	echo Making AWS context Manager quiet
 	;;
     create)
-	
+	if [[ -e ~/.acm/contexts/$2 ]]; then
+	    echo Context ~/.acm/contexts/$2 appears to already exist.
+	    echo You must delete this file to create a new context with the same name, or edit it directly to change it.
+	else
+	    cat > ~/.acm/contexts/$2 <<EOF
+# AWS context $2
+export EC2_PRIVATE_KEY=
+export EC2_PRIVATE_KEY=
+export EC2_CERT=
+export AWS_USER_ID=
+export AWS_ACCESS_KEY_ID=
+export AWS_SECRET_ACCESS_KEY=
+EOF
+	    echo Context skeleton created. You must edit ~/.acm/contexts/$2 to add the proper values for your context.
+	fi
 	;;
     switch)
 	if [[ -e ~/.acm/contexts/$2 ]]; then
@@ -73,7 +98,7 @@ case "$1" in
 	fi
 	;;
     *)
-	echo fell through
+	printUsage
 	;;
 	
 esac
