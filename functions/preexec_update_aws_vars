@@ -1,0 +1,15 @@
+case "$1" in
+    # This will only happen if you are using an ec2 command
+    ec2*)
+	    # Do not run if acm is disabled
+	    if [[ ! -e ~/.acm/disabled ]]; then
+		if [[ -e ~/.acm/configured_context ]]; then
+		    # source the symlink for the current context
+		    . ~/.acm/configured_context
+		    if [[ -e ~/.acm/verbose ]]; then
+			echo AWS Context is `readlink ~/.acm/configured_context`
+		    fi
+		fi
+	    fi
+	    ;;
+esac

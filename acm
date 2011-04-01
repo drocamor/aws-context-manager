@@ -1,0 +1,79 @@
+#! /bin/zsh -f
+
+# ACM: The AWS Context Manager - Changes up your account IDs and credentials for your command line tools when switching AWS accounts.
+
+# Process commands:
+
+# disable - touches a file to disable ACM
+# verbose - Prints your context before running any EC2 commands
+# create <context> - creates a new context
+# switch <context> - switches to a context
+# delete <context> - deletes a context
+# <none> - Prints the context you are currently in 
+
+# Startup:
+# Check for ~/.acm directory, create it if neccessary
+if [[ ! -d ~/.acm ]]; then
+    mkdir -p ~/.acm/contexts
+    if [[ $? -ne 0 ]]; then
+	echo Could not create ~/.acm/contexts. Exiting...
+	exit 1
+    fi
+fi
+
+case "$1" in
+    disable)
+	touch ~/.acm/disabled
+	echo Disabling AWS context Manager
+	;;
+    enable)
+	rm ~/.acm/disabled
+	echo Enabling AWS context Manager
+	;;
+    verbose)
+	touch ~/.acm/verbose
+	echo Making AWS context Manager be verbose
+	;;
+    quiet)
+	rm ~/.acm/verbose
+	echo Making AWS context Manager quiet
+	;;
+    create)
+	
+	;;
+    switch)
+	if [[ -e ~/.acm/contexts/$2 ]]; then
+	    ln -sf ~/.acm/contexts/$2 ~/.acm/configured_context
+	    if [[ $? -ne 0 ]]; then
+		echo Error creating link to ~/.acm/contexts/$2
+	    fi
+	else
+	    echo Context $2 does not seem to exist.
+	fi
+	;;
+    delete)
+	if [[ -e ~/.acm/contexts/$2 ]]; then
+	    rm ~/.acm/contexts/$2
+	    if [[ $? -ne 0 ]]; then
+		echo Error removing ~/.acm/contexts/$2
+	    fi
+	else
+	    echo Context $2 does not seem to exist.
+	fi
+	;;
+    list)
+	echo AWS contexts:
+	ls -1 ~/.acm/contexts
+	;;
+    '')
+	if [[ -h ~/.acm/current_context ]]; then
+	    echo AWS context is `readlink ~/.acm/configured_context`
+	else
+	    echo No AWS context selected
+	fi
+	;;
+    *)
+	echo fell through
+	;;
+	
+esac
