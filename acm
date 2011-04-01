@@ -15,10 +15,12 @@ Command is one of the following:
 create <context> - creates a new context
 switch <context> - switches to a context
 delete <context> - deletes a context
-disable - Touches a file to disable ACM
+disable - Disables ACM
+enable - Enables ACM
 verbose - Prints your context before running any EC2 commands
+quiet - Stop being verbose
 
-See http://github.com/
+See http://github.com/drocamor/aws-context-manager for more info
 
 EOF
 }

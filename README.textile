@@ -1,0 +1,74 @@
+h1. AWS Context Manager
+
+The AWS Context Manager is a tool that manages the access identifiers and keys that the AWS command line tools you use to access your Amazon Web Services account. 
+
+Right now this is zsh only because I only use zsh and I know that it can use preexec to do some magic before I run commands. If you aren't using zsh, maybe it's time to switch.
+
+Alot of the idea about how to do this comes from this "post about integrating git and zsh.":http://sebastiancelis.com/2009/11/16/zsh-prompt-git-users 
+
+h2. Installation
+
+Put the preexec function file in a directory like ~/.zsh/functions. 
+
+Next, you will need to update your .zshrc like so:
+
+@
+fpath=(~/.zsh/functions $fpath)
+autoload -U ~/.zsh/functions/*(:t)
+
+typeset -ga preexec_functions
+
+preexec_functions+='preexec_update_aws_vars'
+@
+
+You will probably want to put acm in your PATH.
+
+h3. Usage
+
+Here's the acm usage message:
+
+@
+acm: Sets, creates and deletes AWS contexts.
+
+Usage: acm <command> 
+
+Command is one of the following:
+<none> - Prints the context you are currently in 
+create <context> - creates a new context
+switch <context> - switches to a context
+delete <context> - deletes a context
+disable - Disables ACM
+enable - Enables ACM
+verbose - Prints your context before running any EC2 commands
+quiet - Stop being verbose
+
+See http://github.com/drocamor/aws-context-manager for more info
+
+@
+
+Create a new context like so:
+
+pre.
+% acm create mycontext
+
+This will create a file at ~/.acm/contexts/mycontext
+
+Here's what should be in the file:
+
+@
+# AWS context mycontext
+export EC2_PRIVATE_KEY=
+export EC2_PRIVATE_KEY=
+export EC2_CERT=
+export AWS_USER_ID=
+export AWS_ACCESS_KEY_ID=
+export AWS_SECRET_ACCESS_KEY=
+@
+
+This file is a template that you will need to edit to make it work for you. Check the AWS documentation if you want to know what some of these are for. These are the ones that work for me.
+
+You can switch, and delete contexts in a similar way.
+
+The enable, disable, verbose, and quiet commands touch some files to change how acm behaves. 
+
+I hope this helps you keep your crazy cloud based life under control. 
