@@ -92,8 +92,9 @@ EOF
 	ls -1 ~/.acm/contexts
 	;;
     '')
-	if [[ -h ~/.acm/current_context ]]; then
-	    echo AWS context is `readlink ~/.acm/configured_context`
+	if [[ -h ~/.acm/configured_context ]]; then
+	    MY_CONTEXT=`readlink ~/.acm/configured_context`
+	    echo AWS context is `basename $MY_CONTEXT`
 	else
 	    echo No AWS context selected
 	fi
