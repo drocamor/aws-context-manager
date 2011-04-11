@@ -7,7 +7,8 @@ case "$1" in
 		    # source the symlink for the current context
 		    . ~/.acm/configured_context
 		    if [[ -e ~/.acm/verbose ]]; then
-			echo AWS Context is `readlink ~/.acm/configured_context`
+			MY_CONTEXT=`readlink ~/.acm/configured_context`
+			echo AWS context is `basename $MY_CONTEXT`
 		    fi
 		fi
 	    fi
