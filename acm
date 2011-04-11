@@ -15,6 +15,7 @@ Command is one of the following:
 create <context> - creates a new context
 switch <context> - switches to a context
 delete <context> - deletes a context
+list - Lists all contexts
 disable - Disables ACM
 enable - Enables ACM
 verbose - Prints your context before running any EC2 commands
