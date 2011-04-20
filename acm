@@ -92,6 +92,9 @@ EOF
 	echo AWS contexts:
 	ls -1 ~/.acm/contexts
 	;;
+    describe)
+	cat ~/.acm/contexts/$2
+	;;
     '')
 	if [[ -h ~/.acm/configured_context ]]; then
 	    MY_CONTEXT=`readlink ~/.acm/configured_context`
