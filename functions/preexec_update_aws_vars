@@ -1,6 +1,6 @@
 case "$1" in
     # This will only happen if you are using an ec2 command
-    ec2*)
+    ec2*|elb*|iam*|mon-*|as-*|rds-*|cfn-*)
 	    # Do not run if acm is disabled
 	    if [[ ! -e ~/.acm/disabled ]]; then
 		if [[ -e ~/.acm/configured_context ]]; then
